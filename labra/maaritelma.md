@@ -18,3 +18,6 @@ listan. Sama pätee salausten ja allekirjoitusten kanssa.
 Ohjelma tulee toimimaan komentorivillä, ja pyrin tekemään siitä korvaavan
 työkalun muille vastaaville linux ohjelmille. Syötteen voi antaa joko
 stdio kautta tai tiedostoina.
+
+Ajatuksena olisi myös toteuttaa kaikki käyttäen pelkkää Cn standardi kirjastoa.
+
