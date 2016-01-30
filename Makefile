@@ -9,17 +9,14 @@ BIN ::= bin/mhash
 run: all
 	$(BIN) crc
 
-all: mkdirs main.o mhash_errors.o mhash_crc.o
+all: mkdirs main.o types.o
 	$(CC) $(CFLAGS) $(OBJ_DIR)/* -o $(BIN)
 
 main.o: main.c
 	$(CC) $(CFLAGS) -c main.c -o $(OBJ_DIR)/main.o
 
-mhash_crc.o: mhash_crc.c
-	$(CC) $(CFLAGS) -c mhash_crc.c -o $(OBJ_DIR)/mhash_crc.o
-
-mhash_errors.o: mhash_errors.c
-	$(CC) $(CFLAGS) -c mhash_errors.c -o $(OBJ_DIR)/mhash_errors.o
+types.o: types.c
+	$(CC) $(CFLAGS) -c types.c -o $(OBJ_DIR)/types.o
 
 test:
 	echo "Nothing to test."

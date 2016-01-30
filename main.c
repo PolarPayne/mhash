@@ -1,16 +1,6 @@
 #include <stdio.h>
-#include <string.h>
 
-#include "mhash_errors.h"
-#include "mhash_crc.h"
-
-#ifdef DEBUG
-#define TRACE(str) printf(str "\n")
-#endif
-
-#ifndef DEBUG
-#define TRACE(str)
-#endif
+#include "types.h"
 
 int main(int argc, char* argv[])
 {
@@ -19,5 +9,12 @@ int main(int argc, char* argv[])
         return 1;
     }
     // solve cli options and call right options
+    // for now, just take input from stdio
+    ui8 a = 63;
+    ui64 b = 1ul << 63;
+    ui8 c = get_pos(b, a);
+    printf("%d, 0x%x\n", a, a);
+    printf("%lu, 0x%lx\n", b, b);
+    printf("%d, 0x%x\n", c, c);
     return 0;
 }
