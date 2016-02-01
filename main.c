@@ -3,11 +3,11 @@
 #include "types.h"
 #include "crc.h"
 
-void test(ui8*, ui64, ui64, ui64);
+void test(uint8_t*, size_t, uint64_t);
 
-void test(ui8* data, ui64 len, ui64 p, ui64 correct)
+void test(uint8_t* data, size_t len, uint64_t correct)
 {
-    ui64 r = crc(data, len, p);
+    ui64 r = mhash_crc_buf(MHASH_CRC32, 0, data, len);
     if (r == correct)
         printf("----MATCH FOUND----\n");
     
@@ -22,27 +22,18 @@ int main(/*int argc, char* argv[]*/)
     // data = 34ea, polynomial = 0x04C11DB7
     // crc = 0xBA2CEA6E
 
-    ui8 data11[] = {0x34, 0xea};
-    ui8 data12[] = {0xae, 0x43};
-    ui64 c1 = 0xba2cea6e;
+    uint8_t data1[] = {0x34, 0xea};
+    uint64_t c1 = 0xba2cea6e;
 
-    ui8 data2[] = "hi mom";
-    ui64 c2 = 0xF01CA468;
+    uint8_t data2[] = "hi mom";
+    uint64_t c2 = 0xF01CA468;
     
-    ui64 p = 0x04C11DB7;
-    ui64 p2 = 0xEDB88320;
+    //uint64_t p = 0x04C11DB7;
+    //uint64_t p2 = 0xEDB88320;
 
-    test(data11, 2, p, c1);
-    test(data11, 2, p2, c1);
-    test(data12, 2, p, c1);
-    test(data12, 2, p2, c1);
+    test(data1, 2, c1);
     printf("\n");
-    test(data2, 5, p, c2);
-    test(data2, 5, p2, c2);
-    test(data2, 6, p, c2);
-    test(data2, 6, p2, c2);
-    test(data2, 7, p, c2);
-    test(data2, 7, p2, c2);
+    test(data2, 6, c2);
 
 
     return 0;

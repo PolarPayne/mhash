@@ -1,7 +1,7 @@
 .PHONY: run all test clean mkdirs
 
 CC ::= clang
-CFLAGS ::= -std=c11 -Weverything -Werror -g -O0 -DDEBUG
+CFLAGS ::= -std=c11 -Weverything -g -O0 -DDEBUG
 
 OBJ_DIR ::= bin/obj
 BIN ::= bin/mhash
