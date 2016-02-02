@@ -1,26 +1,11 @@
 #include "crc.h"
 
-//ui64 crc(ui8* data, ui64 len, ui64 p)
-//{
-//	assert(len > 0);
-//	ui64 rem = 0;
-//	for (ui64 i = 0; i < len; i++) {
-//		rem ^= data[i];
-//		for (ui8 j = 8; j > 0; j--) {
-//			if (rem & 1)
-//				rem ^= p;
-//			rem >>= 1;
-//		}
-//	}
-//	return rem;
-//}
-
 uint64_t static mhash_crc(struct crc type, uint64_t crc, uint8_t* data)
 {
 	uint64_t rem = (~crc) & type.mask;
 	for (size_t bit = 0; bit < 8; bit++) {
         if ((rem & 0x1) != ((*data>>bit) & 0x1)) {
-            rem = (rem >> 0x1) ^ (type.crc);
+            rem = (rem >> 0x1) ^ (type.pol);
         } else {
             rem = rem >> 0x1;
         }
@@ -42,12 +27,22 @@ uint64_t mhash_crc_file(struct crc type, FILE* fp)
 {
 	assert(fp != NULL);
 
-	uint8_t buffer[512];
+	uint8_t buffer[READBUFFERSIZE];
 	int c;
 
-	while ((c = fgetc(fp)) != EOF) {
-       
-    }
+    uint64_t crc = 0;
 
-	return 0;
+	size_t i = 0;
+	while ((c = fgetc(fp)) != EOF) {
+        assert(i >= 0 && i < READBUFFERSIZE);
+        buffer[i] = (uint8_t) c;
+        i++;
+        if (i >= READBUFFERSIZE) {
+            crc = mhash_crc_buf(type, crc, buffer, READBUFFERSIZE);
+            i = 0;
+        }
+    }
+    crc = mhash_crc_buf(type, crc, buffer, i);
+
+	return crc;
 }

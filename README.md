@@ -1,6 +1,8 @@
 # mhash
 Learning C and hashing algorithms.
 
+# Usage
+`mhash [file]`
+
 # Compiling
-Will probably fail catastrophically if not compiled with clang on a 64bit *nix system.
-`make all` will compile the binary to bin/mhash.
+`make all` will compile the binary to `./bin/mhash`.

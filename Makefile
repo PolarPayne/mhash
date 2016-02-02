@@ -1,6 +1,6 @@
 .PHONY: run all test clean mkdirs
 
-CC ::= clang
+CC ::= ./afl/afl-clang
 CFLAGS ::= -std=c11 -Weverything -g -O0 -DDEBUG
 
 OBJ_DIR ::= bin/obj
