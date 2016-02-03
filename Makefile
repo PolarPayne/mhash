@@ -1,13 +1,12 @@
 .PHONY: run all test clean mkdirs
 
-CC ::= ./afl/afl-clang
+
+CC ::= clang
 CFLAGS ::= -std=c11 -Weverything -g -O0 -DDEBUG
 
 OBJ_DIR ::= bin/obj
 BIN ::= bin/mhash
 
-run: all
-	$(BIN) crc
 
 all: mkdirs main.o types.o crc.o
 	$(CC) $(CFLAGS) $(OBJ_DIR)/* -o $(BIN)
@@ -22,7 +21,7 @@ crc.o: crc.c
 	$(CC) $(CFLAGS) -c crc.c -o $(OBJ_DIR)/crc.o
 
 test:
-	echo "Nothing to test."
+	echo "Nothing to test (yet)."
 
 clean:
 	rm -rf $(OBJ_DIR)/* $(BIN)
