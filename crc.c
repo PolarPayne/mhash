@@ -12,7 +12,7 @@ uint64_t static mhash_crc(struct crc type, uint64_t crc, uint8_t* data)
     }
     return (~rem) & type.mask;
 }
-
+size_t t = 0;
 uint64_t mhash_crc_buf(struct crc type, uint64_t crc, uint8_t* data, size_t len)
 {
 	assert(len > 0);
@@ -37,12 +37,15 @@ uint64_t mhash_crc_file(struct crc type, FILE* fp)
         assert(i >= 0 && i < READBUFFERSIZE);
         buffer[i] = (uint8_t) c;
         i++;
-        if (i >= READBUFFERSIZE) {
+        if (i == READBUFFERSIZE) {
+            assert(i == READBUFFERSIZE)
             crc = mhash_crc_buf(type, crc, buffer, READBUFFERSIZE);
             i = 0;
         }
     }
-    crc = mhash_crc_buf(type, crc, buffer, i);
-
+    if (i > 0) {
+        assert(i > 0);
+        crc = mhash_crc_buf(type, crc, buffer, i);
+    }
 	return crc;
 }
