@@ -1,4 +1,3 @@
-#include "types.h"
 #include "crc.h"
 
 int main(int argc, char* argv[])

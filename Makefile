@@ -8,14 +8,11 @@ OBJ_DIR ::= bin/obj
 BIN ::= bin/mhash
 
 
-all: mkdirs main.o types.o crc.o
+all: mkdirs main.o crc.o
 	$(CC) $(CFLAGS) $(OBJ_DIR)/* -o $(BIN)
 
 main.o: main.c
 	$(CC) $(CFLAGS) -c main.c -o $(OBJ_DIR)/main.o
-
-types.o: types.c
-	$(CC) $(CFLAGS) -c types.c -o $(OBJ_DIR)/types.o
 
 crc.o: crc.c
 	$(CC) $(CFLAGS) -c crc.c -o $(OBJ_DIR)/crc.o
