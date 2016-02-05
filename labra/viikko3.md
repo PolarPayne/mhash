@@ -10,3 +10,11 @@ hankala toteuttaa minun koodilleni, koska taulukko tarvitsee
 luoda muistiin ensiksi, ja jokainen eri polynomi tarvitsee
 eri hakutaulukon. Tutkin mahdollisuuksien mukaan tämän
 toteuttamista.
+
+Luin lisää ja tarkemmin [erinomaista artikkelia](http://zlib.net/crc_v3.txt)
+CRCstä, ja minulla alkoi herää epäilys että koodin kanssa voi
+olla ongelmia, mutta minulla ei ole mitään tapaa selvittää
+toimiiko koodi oikein muulla kuin CRC32lla.
+
+Tarkistin nyt myös CRC1 (eli even parity bit) ja se ainakin
+toimii myös oikein.
