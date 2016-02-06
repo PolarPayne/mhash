@@ -18,3 +18,7 @@ toimiiko koodi oikein muulla kuin CRC32lla.
 
 Tarkistin nyt myös CRC1 (eli even parity bit) ja se ainakin
 toimii myös oikein.
+
+Löysin, ja otin käyttöön pienen C kirjaston (4 riviä),
+unit testaamista varten. Kirjoitin kaikille testitiedostoilleni
+testit, nyt testit voi pyörittää kutsumalla `make test`.
