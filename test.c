@@ -3,6 +3,7 @@
 #include "minunit.h"
 
 #include "mhash_crc32.h"
+#include "mhash_parity.h"
 
 int mu_tests_run = 0;
 
@@ -61,6 +62,8 @@ static char* test_crc32_files()
  * CRC32 buffer tests, test values are calculated with
  * two different online calculators to be sure they
  * are correct.
+ *
+ * Do note that these "strings" don't include null byte.
  */
 static char* test_crc32_buf()
 {
@@ -82,10 +85,40 @@ static char* test_crc32_buf()
     return 0;
 }
 
+static char* test_parity_files()
+{
+    FILE* fp;
+    uint8_t parity;
+
+
+    fp = fopen("tests/parity0", "rb");
+    parity = mhash_parity_file(fp, MHASH_PARITY_EVEN);
+    fclose(fp);
+    mu_assert("Even parity of parity0 wasn't 1", 1 == parity);
+
+    fp = fopen("tests/parity1", "rb");
+    parity = mhash_parity_file(fp, MHASH_PARITY_EVEN);
+    fclose(fp);
+    mu_assert("Even parity of parity1 wasn't 0", 0 == parity);
+
+
+    fp = fopen("tests/parity0", "rb");
+    parity = mhash_parity_file(fp, MHASH_PARITY_ODD);
+    fclose(fp);
+    mu_assert("Even parity of parity0 wasn't 0", 0 == parity);
+
+    fp = fopen("tests/parity1", "rb");
+    parity = mhash_parity_file(fp, MHASH_PARITY_ODD);
+    fclose(fp);
+    mu_assert("Even parity of parity1 wasn't 1", 1 == parity);
+}
+
 static char* all_tests()
 {
     mu_run_test(test_crc32_files);
     mu_run_test(test_crc32_buf);
+
+    mu_run_test(test_parity_files);
 
     return 0;
 }

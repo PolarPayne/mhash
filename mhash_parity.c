@@ -71,7 +71,7 @@ uint8_t mhash_parity_file(FILE* fp, uint8_t type)
         }
     }
     if (i > 0)
-        parity = mhash_parity_buf(parity, buffer, MHASH_READBUFFER_SIZE, type);
+        parity = mhash_parity_buf(parity, buffer, i, type);
 
 	return parity;
 }
