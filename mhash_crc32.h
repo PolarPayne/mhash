@@ -7,7 +7,7 @@
 
 #define READBUFFERSIZE 512
 
-uint32_t mhash_crc_buf(uint32_t, uint8_t*, size_t);
-uint32_t mhash_crc_file(FILE*);
+uint32_t mhash_crc32_buf(uint32_t, uint8_t*, size_t);
+uint32_t mhash_crc32_file(FILE*);
 
 #endif // CRC_H

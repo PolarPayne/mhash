@@ -1,6 +1,6 @@
 #include "mhash_crc32.h"
 
-uint32_t static inline mhash_crc(uint32_t crc, uint8_t data)
+uint32_t static inline mhash_crc32(uint32_t crc, uint8_t data)
 {
 	uint32_t rem = ~crc;
 	for (size_t bit = 0; bit < 8; bit++) {
@@ -13,17 +13,17 @@ uint32_t static inline mhash_crc(uint32_t crc, uint8_t data)
     return ~rem;
 }
 
-uint32_t mhash_crc_buf(uint32_t crc, uint8_t* data, size_t len)
+uint32_t mhash_crc32_buf(uint32_t crc, uint8_t* data, size_t len)
 {
 	assert(len > 0);
 
 	for (size_t i = 0; i < len; i++) {
-		crc = mhash_crc(crc, data[i]);
+		crc = mhash_crc32(crc, data[i]);
 	}
 	return crc;
 }
 
-uint32_t mhash_crc_file(FILE* fp)
+uint32_t mhash_crc32_file(FILE* fp)
 {
 	assert(fp != NULL);
 
@@ -39,13 +39,13 @@ uint32_t mhash_crc_file(FILE* fp)
         i++;
         if (i == READBUFFERSIZE) {
             assert(i == READBUFFERSIZE);
-            crc = mhash_crc_buf(crc, buffer, READBUFFERSIZE);
+            crc = mhash_crc32_buf(crc, buffer, READBUFFERSIZE);
             i = 0;
         }
     }
     if (i > 0) {
         assert(i > 0);
-        crc = mhash_crc_buf(crc, buffer, i);
+        crc = mhash_crc32_buf(crc, buffer, i);
     }
 	return crc;
 }
