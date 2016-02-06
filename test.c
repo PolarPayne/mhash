@@ -2,7 +2,7 @@
 
 #include "minunit.h"
 
-#include "crc.h"
+#include "mhash_crc.h"
 
 int mu_tests_run = 0;
 

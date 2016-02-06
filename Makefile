@@ -8,11 +8,11 @@ OBJ_DIR ::= bin/obj
 BIN ::= bin/mhash
 
 
-all: mkdirs main.o crc.o
-	$(CC) $(CFLAGS) $(OBJ_DIR)/main.o $(OBJ_DIR)/crc.o -o $(BIN)
+all: mkdirs main.o mhash_crc.o
+	$(CC) $(CFLAGS) $(OBJ_DIR)/main.o $(OBJ_DIR)/mhash_crc.o -o $(BIN)
 
-test: test.o crc.o
-	$(CC) $(CFLAGS) $(OBJ_DIR)/test.o $(OBJ_DIR)/crc.o -o $(BIN)-test
+test: test.o mhash_crc.o
+	$(CC) $(CFLAGS) $(OBJ_DIR)/test.o $(OBJ_DIR)/mhash_crc.o -o $(BIN)-test
 	$(BIN)-test
 
 main.o: main.c
@@ -21,8 +21,8 @@ main.o: main.c
 test.o: test.c
 	$(CC) $(CFLAGS) -c test.c -o $(OBJ_DIR)/test.o
 
-crc.o: crc.c
-	$(CC) $(CFLAGS) -c crc.c -o $(OBJ_DIR)/crc.o
+mhash_crc.o: mhash_crc.c
+	$(CC) $(CFLAGS) -c mhash_crc.c -o $(OBJ_DIR)/mhash_crc.o
 
 clean:
 	rm -rf $(OBJ_DIR)/* $(BIN)

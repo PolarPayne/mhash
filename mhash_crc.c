@@ -1,4 +1,4 @@
-#include "crc.h"
+#include "mhash_crc.h"
 
 uint64_t static mhash_crc(struct crc type, uint64_t crc, uint8_t* data)
 {
