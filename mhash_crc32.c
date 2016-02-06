@@ -1,6 +1,6 @@
 #include "mhash_crc32.h"
 
-uint32_t static mhash_crc(uint32_t crc, uint8_t data)
+uint32_t static inline mhash_crc(uint32_t crc, uint8_t data)
 {
 	uint32_t rem = ~crc;
 	for (size_t bit = 0; bit < 8; bit++) {

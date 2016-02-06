@@ -13,7 +13,7 @@ all: mkdirs main.o mhash_crc32.o
 
 test: test.o mhash_crc32.o
 	$(CC) $(CFLAGS) $(OBJ_DIR)/test.o $(OBJ_DIR)/mhash_crc32.o -o $(BIN)-test
-	$(BIN)-test
+	time $(BIN)-test
 
 main.o: main.c
 	$(CC) $(CFLAGS) -c main.c -o $(OBJ_DIR)/main.o
