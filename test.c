@@ -57,14 +57,27 @@ static char* test_crc32_files()
     return 0;
 }
 
+/*
+ * CRC32 buffer tests, test values are calculated with
+ * two different online calculators to be sure they
+ * are correct.
+ */
 static char* test_crc32_buf()
 {
-    uint8_t data[4] = {'h', 'o', 'w', 'a'};
+    uint8_t data[4];
     uint32_t hash;
 
-    //data = {'h', 'o', 'w', 'a'};
+    data[0] = 'h'; data[1] = 'o'; data[2] = 'w'; data[3] = 'a';
     hash = mhash_crc32_buf(0, data, 4);
     mu_assert("CRC32 of \"howa\" wasn't 0xc6963212", 0xc6963212 == hash);
+
+    data[0] = 'a'; data[1] = 'b'; data[2] = 'c'; data[3] = 'd';
+    hash = mhash_crc32_buf(0, data, 4);
+    mu_assert("CRC32 of \"abcd\" wasn't 0xed82cd11", 0xed82cd11 == hash);
+
+    data[0] = 'r'; data[1] = 'o'; data[2] = 'n'; data[3] = 'z';
+    hash = mhash_crc32_buf(0, data, 4);
+    mu_assert("CRC32 of \"ronz\" wasn't 0xe857e51d", 0xe857e51d == hash);
 
     return 0;
 }
