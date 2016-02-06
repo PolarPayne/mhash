@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-#define READBUFFERSIZE 512
+#define MHASH_READBUFFER_SIZE 512
 
 uint32_t mhash_crc32_buf(uint32_t, uint8_t*, size_t);
 uint32_t mhash_crc32_file(FILE*);
