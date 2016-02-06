@@ -1,36 +1,36 @@
-#include "mhash_crc.h"
+#include "mhash_crc32.h"
 
-uint64_t static mhash_crc(struct crc type, uint64_t crc, uint8_t* data)
+uint32_t static mhash_crc(uint32_t crc, uint8_t* data)
 {
-	uint64_t rem = (~crc) & type.mask;
+	uint32_t rem = ~crc;
 	for (size_t bit = 0; bit < 8; bit++) {
         if ((rem & 0x1) != ((*data>>bit) & 0x1)) {
-            rem = (rem >> 0x1) ^ (type.pol);
+            rem = (rem >> 0x1) ^ (0xEDB88320);
         } else {
             rem = rem >> 0x1;
         }
     }
-    return (~rem) & type.mask;
+    return ~rem;
 }
 
-uint64_t mhash_crc_buf(struct crc type, uint64_t crc, uint8_t* data, size_t len)
+uint32_t mhash_crc_buf(uint32_t crc, uint8_t* data, size_t len)
 {
 	assert(len > 0);
 
 	for (size_t i = 0; i < len; i++) {
-		crc = mhash_crc(type, crc, &data[i]);
+		crc = mhash_crc(crc, &data[i]);
 	}
 	return crc;
 }
 
-uint64_t mhash_crc_file(struct crc type, FILE* fp)
+uint32_t mhash_crc_file(FILE* fp)
 {
 	assert(fp != NULL);
 
 	uint8_t buffer[READBUFFERSIZE];
 	int c;
 
-    uint64_t crc = 0;
+    uint32_t crc = 0;
 
 	size_t i = 0;
 	while ((c = fgetc(fp)) != EOF) {
@@ -39,13 +39,13 @@ uint64_t mhash_crc_file(struct crc type, FILE* fp)
         i++;
         if (i == READBUFFERSIZE) {
             assert(i == READBUFFERSIZE);
-            crc = mhash_crc_buf(type, crc, buffer, READBUFFERSIZE);
+            crc = mhash_crc_buf(crc, buffer, READBUFFERSIZE);
             i = 0;
         }
     }
     if (i > 0) {
         assert(i > 0);
-        crc = mhash_crc_buf(type, crc, buffer, i);
+        crc = mhash_crc_buf(crc, buffer, i);
     }
 	return crc;
 }
