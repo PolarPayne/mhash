@@ -30,3 +30,13 @@ sekä sen että pystyn etenemään muihin aiheisiin mahdollsimman
 pian. Ajattelin nyt toteuttaa pariteetti bitin laskemisen
 hakutauluilla, tämä antaa myös hyvää pohjaa CRC32 koodin
 optimointiin hakutauluilla.
+
+Toteutin ja testasin pariteetin laskemisen käyttäen apuna
+hakutaulukkoa jonka laskin Pythonilla käyttäen seuraavaa
+hyväksi `bin(n).count("1") % 2`. Bittitasolla palloilessa
+tuntuu että kaikki on todella paljon hankalampaa, ja mikään
+ei koskaan toimi ekalla kerralla.
+
+Koitan löytää aikaa sunnuntailta/maanantailta aloittaakseni
+MD5 koodin, sekä lisätäkseni testejä. Olisi myös kiva jos ehtisin
+parantaa testaus frameworkkiani ja yleisesti testikoodiani.
