@@ -111,6 +111,8 @@ static char* test_parity_files()
 	parity = mhash_parity_file(fp, MHASH_PARITY_ODD);
 	fclose(fp);
 	mu_assert("Even parity of parity1 wasn't 1", 1 == parity);
+
+	return 0;
 }
 
 static char* all_tests()

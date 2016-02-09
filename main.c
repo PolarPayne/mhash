@@ -12,7 +12,7 @@ static const char *const usage[] = {
     NULL
 };
 
-int main(int argc, char* argv[])
+int main(int argc, const char* argv[])
 {
 	int md5 = 0;
 	struct argparse_option options[] = {
