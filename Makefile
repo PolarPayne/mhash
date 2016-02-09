@@ -1,37 +1,41 @@
-.PHONY: run all test clean mkdirs
+CC = clang
 
+BASIC_CFLAGS = -std=c11 -Wall -O0 -g
+BASIC_LDFLAGS = -lm
 
-CC ::= clang
-CFLAGS ::= -std=c11 -Weverything -g -O0 -lm
+ALL_CFLAGS = $(CFLAGS) $(BASIC_CFLAGS)
+ALL_LDFLAGS = $(LDFLAGS) $(BASIC_LDFLAGS)
 
-OBJ_DIR ::= bin/obj
-BIN ::= bin/mhash
+BINNAME=mhash
+TESTNAME=$(BINNAME)-test
 
+BIN_MAKE_CMD=$(CC) $(ALL_CFLAGS) -o $(BINNAME) $(ALL_LDFLAGS)
+TEST_MAKE_CMD=$(CC) $(ALL_CFLAGS) -o $(TESTNAME) $(ALL_LDFLAGS)
 
-all: mkdirs main.o argparse.o mhash_crc32.o mhash_parity.o
-	$(CC) $(CFLAGS) $(OBJ_DIR)/main.o $(OBJ_DIR)/argparse.o $(OBJ_DIR)/mhash_crc32.o $(OBJ_DIR)/mhash_parity.o -o $(BIN)
+all: $(BINNAME)
 
-test: test.o mhash_crc32.o mhash_parity.o
-	$(CC) $(CFLAGS) $(OBJ_DIR)/test.o $(OBJ_DIR)/mhash_crc32.o $(OBJ_DIR)/mhash_parity.o -o $(BIN)-test
-	time $(BIN)-test
+TEST += test.o
+MAIN += main.o
 
-main.o: main.c
-	$(CC) $(CFLAGS) -c main.c -o $(OBJ_DIR)/main.o
+OBJS += argparse.o
 
-argparse.o: argparse.c
-	$(CC) -std=c11 -lm -c argparse.c -o $(OBJ_DIR)/argparse.o	
+OBJS += mhash_crc32.o
+OBJS += mhash_parity.o
+OBJS += mhash_md5.o
 
-test.o: test.c
-	$(CC) $(CFLAGS) -c test.c -o $(OBJ_DIR)/test.o
+ALL_OBJS = $(TEST) $(MAIN) $(OBJS)
 
-mhash_crc32.o: mhash_crc32.c
-	$(CC) $(CFLAGS) -c mhash_crc32.c -o $(OBJ_DIR)/mhash_crc32.o
+$(ALL_OBJS): %.o: %.c
+	$(CC) -o $*.o -c $(ALL_CFLAGS) $<
 
-mhash_parity.o: mhash_parity.c
-	$(CC) $(CFLAGS) -c mhash_parity.c -o $(OBJ_DIR)/mhash_parity.o
+$(BINNAME): $(MAIN) $(OBJS)
+	$(BIN_MAKE_CMD) $^
+
+test: $(TEST) $(OBJS)
+	$(TEST_MAKE_CMD) $^
 
 clean:
-	rm -rf $(OBJ_DIR)/* $(BIN)
+	rm -rf $(BINNAME) $(DYLIBNAME) $(STLIBNAME)
+	rm -rf *.o
 
-mkdirs:
-	mkdir -p $(OBJ_DIR)
+.PHONY: run all test clean
