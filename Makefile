@@ -1,7 +1,9 @@
+.PHONY: run all test clean
+
 CC = clang
 
-BASIC_CFLAGS = -std=c11 -Wall -O0 -g
-BASIC_LDFLAGS = -lm
+BASIC_CFLAGS = -std=c11 -Weverything -O0 -g
+BASIC_LDFLAGS =
 
 ALL_CFLAGS = $(CFLAGS) $(BASIC_CFLAGS)
 ALL_LDFLAGS = $(LDFLAGS) $(BASIC_LDFLAGS)
@@ -17,8 +19,6 @@ all: $(BINNAME)
 TEST += test.o
 MAIN += main.o
 
-OBJS += argparse.o
-
 OBJS += mhash_crc32.o
 OBJS += mhash_parity.o
 OBJS += mhash_md5.o
@@ -33,9 +33,9 @@ $(BINNAME): $(MAIN) $(OBJS)
 
 test: $(TEST) $(OBJS)
 	$(TEST_MAKE_CMD) $^
+	@echo
+	@time ./$(TESTNAME)
 
 clean:
-	rm -rf $(BINNAME) $(DYLIBNAME) $(STLIBNAME)
+	rm -rf $(BINNAME) $(TESTNAME)
 	rm -rf *.o
-
-.PHONY: run all test clean
