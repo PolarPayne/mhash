@@ -10,3 +10,6 @@
   * 3h Bugien etsiskelyä ja korjaamista
   * 3h Aiheesta lueskelua, sekä muuta mietiskelyä
   * 6h Pariteetin koodaamista, ja testien kirjoittamista, paljon lukemista ja tutkimista aiheesta
+* Viikko 4
+  * 2h MD5 aloittelua
+  * 4h CLI parsijan kirjoittamista
