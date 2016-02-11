@@ -21,7 +21,7 @@ MAIN += main.o
 
 OBJS += mhash_crc32.o
 OBJS += mhash_parity.o
-OBJS += mhash_md5.o
+#OBJS += mhash_md5.o
 
 ALL_OBJS = $(TEST) $(MAIN) $(OBJS)
 
