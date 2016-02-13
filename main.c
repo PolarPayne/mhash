@@ -145,8 +145,5 @@ int main(const int argc, const char* argv[])
 		}
 	}
 
-	printf("binary: %d\n", binary_mode);
-	printf("check: %d\n", check);
-
 	return 0;
 }
