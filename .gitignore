@@ -3,3 +3,4 @@ afl/
 *.o
 mhash
 mhash-test
+*.exe
