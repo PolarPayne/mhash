@@ -130,15 +130,15 @@ int main(const int argc, const char* argv[])
 
 			if (EVEN_PARITY == hash) {
 				uint8_t out = mhash_parity_file(fp, MHASH_PARITY_EVEN);
-				printf(PRIu8 " %s\n", out, argv[i]);
+				printf("%" PRIu8 " %s\n", out, argv[i]);
 			}
 			if (ODD_PARITY == hash) {
 				uint8_t out = mhash_parity_file(fp, MHASH_PARITY_ODD);
-				printf(PRIu8 " %s\n", out, argv[i]);
+				printf("%" PRIu8 " %s\n", out, argv[i]);
 			}
 			if (CRC32 == hash) {
 				uint32_t out = mhash_crc32_file(fp);
-				printf(PRIx32 " %s\n", out, argv[i]);
+				printf("%" PRIx32 " %s\n", out, argv[i]);
 			}
 
 			fclose(fp);
