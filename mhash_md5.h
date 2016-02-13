@@ -1,6 +1,7 @@
 #ifndef MHASH_MD5_H
 #define MHASH_MD5_H
 
+#include <stdlib.h>
 #include <stdio.h>
 #include <inttypes.h>
 

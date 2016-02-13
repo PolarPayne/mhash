@@ -4,7 +4,7 @@
 	((x << c) | (x >> (32-c)));
 
 void static to_uint8(uint32_t, uint8_t *);
-uint32_t to_uint32(const uint8_t *);
+uint32_t static to_uint32(const uint8_t *);
 
 void static to_uint8(uint32_t val, uint8_t *bytes)
 {
@@ -14,7 +14,7 @@ void static to_uint8(uint32_t val, uint8_t *bytes)
 	bytes[3] = (uint8_t) (val >> 24);
 }
  
-uint32_t to_uint32(const uint8_t *bytes)
+uint32_t static to_uint32(const uint8_t *bytes)
 {
 	return (uint32_t) bytes[0]
 	| ((uint32_t) bytes[1] << 8)
@@ -67,14 +67,18 @@ uint8_t* mhash_md5_buf(uint8_t* data, size_t len)
 	 * append original length in bits mod (2 pow 64) to message
 	 */
 
+	size_t new_len;
+	for (new_len = len + 1; new_len % (512/8) != 448/8; new_len++);
 
+	uint8_t* msg = (uint8_t*) calloc(new_len, sizeof(uint8_t));
+	memcpy(msg, data, len);
+	msg[len] = 0x80;
 
-	for (/*each 512bit chunk*/) {
-
+	for (size_t offset = 0; offset < new_len; offset += (512/8)) {
 		// break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15
 		uint32_t M[16];
 		for (uint32_t i = 0; i < 16; i++)
-			return NULL;//M[i] = to_uint32(msg + offset + i*4);
+			M[i] = to_uint32(msg[offset] + i*4);
 
 		uint32_t A = a0;
 		uint32_t B = b0;
@@ -110,9 +114,16 @@ uint8_t* mhash_md5_buf(uint8_t* data, size_t len)
 		d0 = d0 + D;
 	}
 
-	uint8_t digest[16] = (a0 << 95) ^ (b0 << 63) ^ (c0 << 31) ^ (d0 << 0);
+	free(msg);
 
-	return NULL;
+	uint8_t digest[16];// = (a0 << 95) ^ (b0 << 63) ^ (c0 << 31) ^ (d0 << 0);
+	to_uint8(a0, digest[0]);
+	to_uint8(b0, digest[4]);
+	to_uint8(c0, digest[8]);
+	to_uint8(d0, digest[12]);
+
+
+	return digest;
 }
 
 uint8_t* mhash_md5_file(FILE* fp)
