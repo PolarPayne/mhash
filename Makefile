@@ -1,18 +1,9 @@
 .PHONY: run all test clean
 
-BASIC_CFLAGS = -std=c11 -O0 -g
+CC = clang
+
+BASIC_CFLAGS = -std=c11 -O0 -g -Weverything
 BASIC_LDFLAGS =
-
-ifeq ($(OS),Windows_NT)
-	CC = gcc
-	BASIC_CFLAGS += -Wall -Wpedantic
-else
-	CC = clang
-	BASIC_CFLAGS += -Weverything
-endif
-
-CC = gcc
-
 
 ALL_CFLAGS = $(CFLAGS) $(BASIC_CFLAGS)
 ALL_LDFLAGS = $(LDFLAGS) $(BASIC_LDFLAGS)
@@ -31,6 +22,7 @@ MAIN += main.o
 OBJS += mhash_crc32.o
 OBJS += mhash_parity.o
 OBJS += mhash_md5.o
+OBJS += mhash_sha1.o
 
 ALL_OBJS = $(TEST) $(MAIN) $(OBJS)
 
