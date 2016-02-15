@@ -15,3 +15,5 @@ Learning C and hashing algorithms.
 * Improve minunit framework (it is a bit too minimal)
 * Get MD5 or SHA1 working
 * Use fread() for file reading
+* More comments (especially for magic values)
+* Make public functions work nicer (return error codes etc.)
