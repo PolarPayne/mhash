@@ -132,13 +132,23 @@ int main(const int argc, const char* argv[])
 		return 1;
 	} else {
 		for (int i = 1; i < argc; i++) {
-			if (strlen(argv[i]) > 0 && argv[i][0] == '-')
+			unsigned long len = strlen(argv[i]);
+			if (len > 0 && argv[i][0] == '-' && len != 1)
 				continue;
 
+			char* mode;
 			if (binary_mode)
-				fp = fopen(argv[i], "rb");
+				mode = "rb";
 			else
-				fp = fopen(argv[i], "r");
+				mode = "r";
+
+			if (len == 1 && argv[i][0] == '-'){
+				// make sure that stdin is in right mode
+				freopen(NULL, mode, stdin);
+				fp = stdin;
+			} else {
+				fp = fopen(argv[i], mode);
+			}
 
 			if (EVEN_PARITY == hash) {
 				uint8_t out = mhash_parity_file(fp, MHASH_PARITY_EVEN);
