@@ -14,3 +14,4 @@ Learning C and hashing algorithms.
 * Prettier tests, with less copy-paste code
 * Improve minunit framework (it is a bit too minimal)
 * Get MD5 or SHA1 working
+* Use fread() for file reading

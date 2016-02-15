@@ -5,6 +5,8 @@
 #include "mhash_version.h"
 #include "mhash_crc32.h"
 #include "mhash_parity.h"
+#include "mhash_md5.h"
+#include "mhash_sha1.h"
 
 void invalid_option(const char*);
 void print_help(void);
@@ -31,6 +33,8 @@ void print_help()
 	fprintf(stderr, "      --even-parity\n");
 	fprintf(stderr, "      --odd-parity\n");
 	fprintf(stderr, "      --crc32\n");
+	fprintf(stderr, "      --md5\n");
+	fprintf(stderr, "      --sha1\n");
 	fprintf(stderr, "\n");
 	fprintf(stderr, "      --help      print this help and exit\n");
 	fprintf(stderr, "      --version  print version info and exit\n");
@@ -46,6 +50,8 @@ void print_version()
 #define EVEN_PARITY 1
 #define ODD_PARITY 2
 #define CRC32 3
+#define MD5 4
+#define SHA1 5
 
 int main(const int argc, const char* argv[])
 {
@@ -81,6 +87,10 @@ int main(const int argc, const char* argv[])
 				hash = ODD_PARITY;
 			} else if (strcmp("--crc32", argv[i]) == 0) {
 				hash = CRC32;
+			} else if (strcmp("--md5", argv[i]) == 0) {
+				hash = MD5;
+			} else if (strcmp("--sha1", argv[i]) == 0) {
+				hash = SHA1;
 			} else {
 				invalid_option(argv[i]);
 				return 1;
@@ -130,16 +140,26 @@ int main(const int argc, const char* argv[])
 
 			if (EVEN_PARITY == hash) {
 				uint8_t out = mhash_parity_file(fp, MHASH_PARITY_EVEN);
-				printf("%" PRIu8 " %s\n", out, argv[i]);
+				printf("%" PRIu8, out);
 			}
 			if (ODD_PARITY == hash) {
 				uint8_t out = mhash_parity_file(fp, MHASH_PARITY_ODD);
-				printf("%" PRIu8 " %s\n", out, argv[i]);
+				printf("%" PRIu8, out);
 			}
 			if (CRC32 == hash) {
 				uint32_t out = mhash_crc32_file(fp);
-				printf("%" PRIx32 " %s\n", out, argv[i]);
+				printf("%" PRIx32, out);
 			}
+			if (MD5 == hash) {
+				fprintf(stderr, "MD5 not implemented (yet)\n");
+				return 1;
+			}
+			if (SHA1 == hash) {
+				fprintf(stderr, "SHA1 not implemented (yet)\n");
+				return 1;
+			}
+
+			printf("  %s\n", argv[i]);
 
 			fclose(fp);
 		}
