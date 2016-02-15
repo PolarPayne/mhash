@@ -1,11 +1,13 @@
 #include "mhash_crc32.h"
 
+#define CRC32_POL 0xedb88320
+
 uint32_t static inline mhash_crc32(uint32_t crc, uint8_t data)
 {
 	uint32_t rem = ~crc;
 	for (size_t bit = 0; bit < 8; bit++) {
 		if ((rem & 0x1) != ((data>>bit) & 0x1)) {
-			rem = (rem >> 0x1) ^ (0xEDB88320);
+			rem = (rem >> 0x1) ^ (CRC32_POL);
 		} else {
 			rem = rem >> 0x1;
 		}
