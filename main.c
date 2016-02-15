@@ -47,11 +47,13 @@ void print_version()
 	fprintf(stderr, "License: ZLib <https://opensource.org/licenses/Zlib>\n");
 }
 
-#define EVEN_PARITY 1
-#define ODD_PARITY 2
-#define CRC32 3
-#define MD5 4
-#define SHA1 5
+enum hashing_algorithm {
+	EVEN_PARITY,
+	ODD_PARITY,
+	CRC32,
+	MD5,
+	SHA1
+};
 
 int main(const int argc, const char* argv[])
 {
