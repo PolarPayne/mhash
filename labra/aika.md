@@ -13,3 +13,5 @@
 * Viikko 4
   * 2h MD5 aloittelua
   * 4h CLI parsijan kirjoittamista
+  * 14+h Palloilua SHA1 ja MD5 algoritmien kanssa joka suuntaan
+  * 1h Komentorivi parsijan viimeistelyä
