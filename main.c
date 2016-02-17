@@ -3,10 +3,11 @@
 #include <string.h>
 
 #include "mhash_version.h"
+#include "mhash_errors.h"
 #include "mhash_crc32.h"
 #include "mhash_parity.h"
-#include "mhash_md5.h"
-#include "mhash_sha1.h"
+//#include "mhash_md5.h"
+//#include "mhash_sha1.h"
 
 void invalid_option(const char*);
 void print_help(void);
@@ -136,11 +137,7 @@ int main(const int argc, const char* argv[])
 			if (len > 0 && argv[i][0] == '-' && len != 1)
 				continue;
 
-			char* mode;
-			if (binary_mode)
-				mode = "rb";
-			else
-				mode = "r";
+			char* mode = binary_mode ? "rb" : "r";
 
 			if (len == 1 && argv[i][0] == '-'){
 				// make sure that stdin is in right mode
@@ -150,6 +147,7 @@ int main(const int argc, const char* argv[])
 				fp = fopen(argv[i], mode);
 			}
 
+			// switches don't work nicely when values are initialized there
 			if (EVEN_PARITY == hash) {
 				uint8_t out = mhash_parity_file(fp, MHASH_PARITY_EVEN);
 				printf("%" PRIu8, out);
@@ -159,7 +157,8 @@ int main(const int argc, const char* argv[])
 				printf("%" PRIu8, out);
 			}
 			if (CRC32 == hash) {
-				uint32_t out = mhash_crc32_file(fp);
+				uint32_t out;
+				mhash_crc32_file(fp, &out);
 				printf("%" PRIx32, out);
 			}
 			if (MD5 == hash) {

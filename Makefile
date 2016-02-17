@@ -19,10 +19,11 @@ all: $(BINNAME)
 TEST += test.o
 MAIN += main.o
 
+OBJS += mhash_errors.o
 OBJS += mhash_crc32.o
 OBJS += mhash_parity.o
-OBJS += mhash_md5.o
-OBJS += mhash_sha1.o
+#OBJS += mhash_md5.o
+#OBJS += mhash_sha1.o
 
 ALL_OBJS = $(TEST) $(MAIN) $(OBJS)
 
