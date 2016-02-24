@@ -7,7 +7,7 @@
 #include "mhash_crc32.h"
 #include "mhash_parity.h"
 //#include "mhash_md5.h"
-//#include "mhash_sha1.h"
+#include "mhash_sha1.h"
 
 void invalid_option(const char*);
 void print_help(void);
@@ -157,8 +157,7 @@ int main(const int argc, const char* argv[])
 				printf("%" PRIu8, out);
 			}
 			if (CRC32 == hash) {
-				uint32_t out;
-				mhash_crc32_file(fp, &out);
+				uint32_t out = mhash_crc32_file(fp);
 				printf("%" PRIx32, out);
 			}
 			if (MD5 == hash) {
@@ -166,8 +165,10 @@ int main(const int argc, const char* argv[])
 				return 1;
 			}
 			if (SHA1 == hash) {
-				fprintf(stderr, "SHA1 not implemented (yet)\n");
-				return 1;
+				uint8_t* out = mhash_sha1_file(fp);
+				for (uint8_t j = 0; j < 20; j++)
+					printf("%02" PRIx8, out[j]);
+				free(out);
 			}
 
 			printf("  %s\n", argv[i]);
