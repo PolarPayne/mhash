@@ -165,10 +165,10 @@ int main(const int argc, const char* argv[])
 				return 1;
 			}
 			if (SHA1 == hash) {
-				uint8_t* out = mhash_sha1_file(fp);
+				uint8_t out[20];
+				mhash_sha1_file(fp, &out);
 				for (uint8_t j = 0; j < 20; j++)
 					printf("%02" PRIx8, out[j]);
-				free(out);
 			}
 
 			printf("  %s\n", argv[i]);

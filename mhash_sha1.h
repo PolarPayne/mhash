@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <inttypes.h>
 #include <stdio.h>
+#include <string.h>
 #include <assert.h>
 
 #include "mhash_utils.h"
@@ -21,8 +22,8 @@ typedef struct mhash_sha1_ctx {
 void mhash_sha1_init(mhash_sha1_ctx_type*);
 void mhash_sha1_writebyte(mhash_sha1_ctx_type*, uint8_t);
 void mhash_sha1_write(mhash_sha1_ctx_type*, char*, uint64_t);
-void mhash_sha1_result(mhash_sha1_ctx_type*, uint8_t*);
+uint8_t* mhash_sha1_result(mhash_sha1_ctx_type*);
 
-uint8_t* mhash_sha1_file(FILE*);
+void mhash_sha1_file(FILE*, uint8_t*);
 
 #endif //MHASH_SHA1_H
