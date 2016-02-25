@@ -58,8 +58,8 @@ enum hashing_algorithm {
 
 int main(const int argc, const char* argv[])
 {
-	int binary_mode = 0;
-	int check = 0;
+	_Bool binary_mode = 0;
+	_Bool check = 0;
 	int hash = 0;
 
 	// parse options
@@ -151,20 +151,16 @@ int main(const int argc, const char* argv[])
 			if (EVEN_PARITY == hash) {
 				uint8_t out = mhash_parity_file(fp, MHASH_PARITY_EVEN);
 				printf("%" PRIu8, out);
-			}
-			if (ODD_PARITY == hash) {
+			} else if (ODD_PARITY == hash) {
 				uint8_t out = mhash_parity_file(fp, MHASH_PARITY_ODD);
 				printf("%" PRIu8, out);
-			}
-			if (CRC32 == hash) {
+			} else if (CRC32 == hash) {
 				uint32_t out = mhash_crc32_file(fp);
 				printf("%" PRIx32, out);
-			}
-			if (MD5 == hash) {
+			} else if (MD5 == hash) {
 				fprintf(stderr, "MD5 not implemented (yet)\n");
 				return 1;
-			}
-			if (SHA1 == hash) {
+			} else if (SHA1 == hash) {
 				uint8_t out[20];
 				mhash_sha1_file(fp, &out);
 				for (uint8_t j = 0; j < 20; j++)
