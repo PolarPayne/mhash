@@ -40,5 +40,4 @@ test: $(TEST) $(OBJS)
 	@time ./$(TESTNAME)
 
 clean:
-	rm -rf $(BINNAME) $(TESTNAME)
 	rm -rf *.o

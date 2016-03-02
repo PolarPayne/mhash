@@ -135,6 +135,5 @@ void mhash_sha1_file(FILE* fp, uint8_t* res)
 	while ((c = fread(buffer, sizeof(uint8_t), 512, fp)) != 0)
 		mhash_sha1_write(&ctx, buffer, c);
 
-	uint8_t* hash = mhash_sha1_result(&ctx);
-	memcpy(res, hash, 20);
+	memcpy(res, mhash_sha1_result(&ctx), 20);
 }

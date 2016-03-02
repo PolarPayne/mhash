@@ -161,8 +161,8 @@ int main(const int argc, const char* argv[])
 				fprintf(stderr, "MD5 not implemented (yet)\n");
 				return 1;
 			} else if (SHA1 == hash) {
-				uint8_t out[20];
-				mhash_sha1_file(fp, &out);
+				uint8_t out[HASH_LENGTH];
+				mhash_sha1_file(fp, out);
 				for (uint8_t j = 0; j < 20; j++)
 					printf("%02" PRIx8, out[j]);
 			}
