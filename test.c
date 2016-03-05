@@ -1,9 +1,12 @@
 #include <stdio.h>
+#include <assert.h>
 
 #include "minunit.h"
 
 #include "mhash_crc32.h"
 #include "mhash_parity.h"
+#include "mhash_sha1.h"
+#include "google_sha1.h"
 
 int mu_tests_run = 0;
 
@@ -115,12 +118,100 @@ static char* test_parity_files()
 	return 0;
 }
 
+void static print_sha1(uint8_t* h)
+{
+	for (int i = 0; i < 20; i++) {
+		fprintf(stderr, "%02" PRIx8, h[i]);
+	}
+	fprintf(stderr, "\n");
+}
+
+void static print_states(sha1nfo* google, mhash_sha1_ctx_type* mhash)
+{
+	fprintf(stderr, "---- BUFFER -----\n");
+	for (int i = 0; i < 16; i++) {
+		fprintf(stderr, "%08" PRIx32 " %08" PRIx32 "\n",
+			google->buffer[i], mhash->buffer[i]);
+	}
+	
+	fprintf(stderr, "----- STATE -----\n");
+	for (int i = 0; i < 5; i++) {
+		fprintf(stderr, "%08" PRIx32 " %08" PRIx32 "\n",
+			google->state[i], mhash->state[i]);
+	}
+}
+
+#define SIZE 256
+_Bool static google_vs_mhash(char* filename)
+{
+	FILE* google_fp = fopen(filename, "rb");
+	FILE* mhash_fp = fopen(filename, "rb");
+
+	assert(google_fp != NULL);
+	assert(mhash_fp != NULL);
+
+	sha1nfo google;
+	mhash_sha1_ctx_type mhash;
+
+	sha1_init(&google);
+	mhash_sha1_init(&mhash);
+
+	uint64_t google_c = 0;
+	uint64_t mhash_c = 0;
+
+	char google_buffer[SIZE] = {0};
+	char mhash_buffer[SIZE] = {0};
+
+
+	for (
+		int k = 0;
+
+		(mhash_c = fread(mhash_buffer, sizeof(uint8_t), SIZE, mhash_fp)) != 0 ||
+		(google_c = fread(google_buffer, sizeof(uint8_t), SIZE, google_fp)) != 0;
+
+		k++
+	) {
+		sha1_write(&google, google_buffer, google_c);
+		mhash_sha1_write(&mhash, mhash_buffer, mhash_c);
+
+		fprintf(stderr, "---- PASS %02i ----\n", k);
+		print_states(&google, &mhash);
+		
+	}
+
+	//uint8_t google_res[20];
+	//uint8_t mhash_res[20];
+
+	uint8_t* google_res = sha1_result(&google);
+	//memcpy(google_res, sha1_result(&google), 20);
+	uint8_t* mhash_res = mhash_sha1_result(&mhash);
+	//memcpy(mhash_res, mhash_sha1_result(&mhash), 20);
+
+	print_sha1(google_res);
+	print_sha1(mhash_res);
+
+	fclose(google_fp);
+	fclose(mhash_fp);
+
+	for (int i = 0; i < 20; i++) {
+		if (google_res[i] != mhash_res[i])
+			return 0;
+	}
+	return 1;
+
+}
+
+static char* test_sha1()
+{
+	mu_assert("Google SHA1 and mhash SHA1 output were different",
+		google_vs_mhash("tests/fox.txt"));
+
+	return 0;
+}
+
 static char* all_tests()
 {
-	mu_run_test(test_crc32_files);
-	mu_run_test(test_crc32_buf);
-
-	mu_run_test(test_parity_files);
+	mu_run_test(test_sha1);
 
 	return 0;
 }

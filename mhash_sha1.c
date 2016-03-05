@@ -4,6 +4,21 @@ uint32_t static rol32(uint32_t number, uint8_t bits) {
 	return ((number << bits) | (number >> (32-bits)));
 }
 
+void static print_state(mhash_sha1_ctx_type* ctx)
+{
+	fprintf(stderr, "- MHASH BUFFER -\n");
+	for (int i = 0; i < 64; i++) {
+		fprintf(stderr, "%02" PRIx8 "\n",
+			((uint8_t*) ctx->buffer)[i]);
+	}
+	
+	fprintf(stderr, "- MHASH STATE -\n");
+	for (int i = 0; i < 20; i++) {
+		fprintf(stderr, "%02" PRIx8 "\n",
+			((uint8_t*) ctx->state)[i]);
+	}
+}
+
 void mhash_sha1_init(mhash_sha1_ctx_type* ctx)
 {
 	ctx->state[0] = 0x67452301;
@@ -18,6 +33,7 @@ void mhash_sha1_init(mhash_sha1_ctx_type* ctx)
 void static hash_block(mhash_sha1_ctx_type* ctx)
 {
 	uint32_t a, b, c, d, e, f, k, t;
+	uint32_t w[80];
 
 	a = ctx->state[0];
 	b = ctx->state[1];
@@ -25,8 +41,13 @@ void static hash_block(mhash_sha1_ctx_type* ctx)
 	d = ctx->state[3];
 	e = ctx->state[4];
 
-	for (uint8_t i = 16; i < 80; i++) {
-		ctx->buffer[i] = rol32(ctx->buffer[i-3] ^ ctx->buffer[i-8] ^ ctx->buffer[i-14] ^ ctx->buffer[i-16], 1);
+	for (uint8_t i = 0; i < 80; i++) {
+		if (i < 16)
+			w[i] = ctx->buffer[i];
+		else
+			w[i] = rol32(ctx->buffer[i-3] ^ ctx->buffer[i-8] ^ ctx->buffer[i-14] ^ ctx->buffer[i-16], 1);
+		//w[i] = (((w[i])<<24)& 0xff000000) | (((w[i])<<8) & 0x00ff0000) | (((w[i])>>8) & 0x0000ff00) | (((w[i])>>24)& 0x000000ff);
+		fprintf(stderr, "w[%02" PRIu8 "] %08" PRIx32 "\n",i, w[i]);
 	}
 
 	for (uint8_t i = 0; i < 80; i++) {
@@ -43,22 +64,24 @@ void static hash_block(mhash_sha1_ctx_type* ctx)
 			f = b ^ c ^ d;
 			k = 0xca62c1d6;
 		}
-		t = rol32(a, 5) + f + e + k + ctx->buffer[i];
+		t = rol32(a, 5) + f + e + k + w[i];
 		e = d;
 		d = c;
 		c = rol32(b, 30);
 		b = a;
 		a = t;
 	}
-	ctx->state[0] = ctx->state[0] + a;
-	ctx->state[1] = ctx->state[1] + b; 
-	ctx->state[2] = ctx->state[2] + c;
-	ctx->state[3] = ctx->state[3] + d;
-	ctx->state[4] = ctx->state[4] + e;
+	ctx->state[0] += a;
+	ctx->state[1] += b; 
+	ctx->state[2] += c;
+	ctx->state[3] += d;
+	ctx->state[4] += e;
 }
 
 void static add_uncounted(mhash_sha1_ctx_type* ctx, uint8_t data)
 {
+	fprintf(stderr, "BEFORE\n");
+	print_state(ctx);
 	uint8_t* const b = (uint8_t*) ctx->buffer;
 
 	if (mhash_is_big_endian())
@@ -72,6 +95,8 @@ void static add_uncounted(mhash_sha1_ctx_type* ctx, uint8_t data)
 		hash_block(ctx);
 		ctx->buffer_offset = 0;
 	}
+	fprintf(stderr, "AFTER\n");
+	print_state(ctx);
 }
 
 void mhash_sha1_writebyte(mhash_sha1_ctx_type* ctx, uint8_t data)
