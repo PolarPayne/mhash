@@ -144,43 +144,11 @@ void static print_states(sha1nfo* google, mhash_sha1_ctx_type* mhash)
 #define SIZE 256
 _Bool static google_vs_mhash(char* filename)
 {
-	FILE* google_fp = fopen(filename, "rb");
-	FILE* mhash_fp = fopen(filename, "rb");
-
-	assert(google_fp != NULL);
-	assert(mhash_fp != NULL);
-
 	sha1nfo google;
 	mhash_sha1_ctx_type mhash;
 
 	sha1_init(&google);
 	mhash_sha1_init(&mhash);
-
-	uint64_t google_c = 0;
-	uint64_t mhash_c = 0;
-
-	char google_buffer[SIZE] = {0};
-	char mhash_buffer[SIZE] = {0};
-
-
-	for (
-		int k = 0;
-
-		(mhash_c = fread(mhash_buffer, sizeof(uint8_t), SIZE, mhash_fp)) != 0 ||
-		(google_c = fread(google_buffer, sizeof(uint8_t), SIZE, google_fp)) != 0;
-
-		k++
-	) {
-		sha1_write(&google, google_buffer, google_c);
-		mhash_sha1_write(&mhash, mhash_buffer, mhash_c);
-
-		fprintf(stderr, "---- PASS %02i ----\n", k);
-		print_states(&google, &mhash);
-		
-	}
-
-	//uint8_t google_res[20];
-	//uint8_t mhash_res[20];
 
 	uint8_t* google_res = sha1_result(&google);
 	//memcpy(google_res, sha1_result(&google), 20);
@@ -189,9 +157,6 @@ _Bool static google_vs_mhash(char* filename)
 
 	print_sha1(google_res);
 	print_sha1(mhash_res);
-
-	fclose(google_fp);
-	fclose(mhash_fp);
 
 	for (int i = 0; i < 20; i++) {
 		if (google_res[i] != mhash_res[i])
