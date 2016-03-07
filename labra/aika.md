@@ -15,3 +15,9 @@
   * 4h CLI parsijan kirjoittamista
   * 14+h Palloilua SHA1 ja MD5 algoritmien kanssa joka suuntaan
   * 1h Komentorivi parsijan viimeistelyä
+* Viikko 5
+  * 5+h SHA1 korjaamista ja uudelleen kirjoittamista
+* Viikko 6
+  * 8+h SHA1 debuggaamista ilman merkittäviä tuloksia
+* Viikko 7
+  * 1h Vertaisarvioinnin kirjoittaminen (myöhässä), viikkoraporttien päivittäminen
