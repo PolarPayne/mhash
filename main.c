@@ -150,9 +150,6 @@ int main(const int argc, const char* argv[])
 			} else if (CRC32 == hash) {
 				uint32_t out = mhash_crc32_file(fp);
 				printf("%" PRIx32, out);
-			} else if (MD5 == hash) {
-				fprintf(stderr, "MD5 not implemented (yet)\n");
-				return 1;
 			} else if (SHA1 == hash) {
 				uint8_t out[HASH_LENGTH];
 				mhash_sha1_file(fp, out);

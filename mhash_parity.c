@@ -1,43 +1,18 @@
 #include "mhash_parity.h"
 
-/*
- * Precalculated table with even parities
- * of all 8 bit unsigned integers.
- */
-static uint8_t parity_table[256] = {
-	0, 1, 1, 0, 1, 0, 0, 1,
-	1, 0, 0, 1, 0, 1, 1, 0,
-	1, 0, 0, 1, 0, 1, 1, 0,
-	0, 1, 1, 0, 1, 0, 0, 1,
-	1, 0, 0, 1, 0, 1, 1, 0,
-	0, 1, 1, 0, 1, 0, 0, 1,
-	0, 1, 1, 0, 1, 0, 0, 1,
-	1, 0, 0, 1, 0, 1, 1, 0,
-	1, 0, 0, 1, 0, 1, 1, 0,
-	0, 1, 1, 0, 1, 0, 0, 1,
-	0, 1, 1, 0, 1, 0, 0, 1,
-	1, 0, 0, 1, 0, 1, 1, 0,
-	0, 1, 1, 0, 1, 0, 0, 1,
-	1, 0, 0, 1, 0, 1, 1, 0,
-	1, 0, 0, 1, 0, 1, 1, 0,
-	0, 1, 1, 0, 1, 0, 0, 1,
-	1, 0, 0, 1, 0, 1, 1, 0,
-	0, 1, 1, 0, 1, 0, 0, 1,
-	0, 1, 1, 0, 1, 0, 0, 1,
-	1, 0, 0, 1, 0, 1, 1, 0,
-	0, 1, 1, 0, 1, 0, 0, 1,
-	1, 0, 0, 1, 0, 1, 1, 0,
-	1, 0, 0, 1, 0, 1, 1, 0,
-	0, 1, 1, 0, 1, 0, 0, 1,
-	0, 1, 1, 0, 1, 0, 0, 1,
-	1, 0, 0, 1, 0, 1, 1, 0,
-	1, 0, 0, 1, 0, 1, 1, 0,
-	0, 1, 1, 0, 1, 0, 0, 1,
-	1, 0, 0, 1, 0, 1, 1, 0,
-	0, 1, 1, 0, 1, 0, 0, 1,
-	0, 1, 1, 0, 1, 0, 0, 1,
-	1, 0, 0, 1, 0, 1, 1, 0
-};
+uint8_t static parity_table[UINT8_MAX] = {2};
+
+uint8_t static parity_of(uint8_t data)
+{
+	if (parity_table[data] == 2) {
+		uint8_t c = 0;
+		for (uint8_t i = 0; i < 8; i++) {
+			c += (data & (1 << i)) >> i;
+		}
+		parity_table[data] = c % 2;
+	}
+	return parity_table[data];
+}
 
 uint8_t mhash_parity_buf(uint8_t parity, uint8_t* data, size_t len, uint8_t type)
 {
@@ -46,7 +21,7 @@ uint8_t mhash_parity_buf(uint8_t parity, uint8_t* data, size_t len, uint8_t type
 		p ^= data[i];
 	}
 
-	return parity ^ (parity_table[p] ^ type);
+	return parity ^ parity_of(p) ^ type;
 }
 
 #define BUFFER_LEN 512

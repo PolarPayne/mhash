@@ -8,8 +8,8 @@ enum mhash_parity {
 	mhash_parity_even = 0,
 	mhash_parity_odd = 1
 };
-#define MHASH_PARITY_EVEN 0
-#define MHASH_PARITY_ODD 1
+#define MHASH_PARITY_ODD 0
+#define MHASH_PARITY_EVEN 1
 
 /* Returns CRC32 of data.
  * @crc The current crc of your data (use 0 on first pass).
