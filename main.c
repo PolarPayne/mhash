@@ -5,7 +5,6 @@
 #include "mhash_version.h"
 #include "mhash_crc32.h"
 #include "mhash_parity.h"
-//#include "mhash_md5.h"
 #include "mhash_sha1.h"
 
 void invalid_option(const char*);
@@ -33,7 +32,6 @@ void print_help()
 	fprintf(stderr, "      --even-parity\n");
 	fprintf(stderr, "      --odd-parity\n");
 	fprintf(stderr, "      --crc32\n");
-	fprintf(stderr, "      --md5\n");
 	fprintf(stderr, "      --sha1\n");
 	fprintf(stderr, "\n");
 	fprintf(stderr, "      --help      print this help and exit\n");
@@ -52,7 +50,6 @@ enum hashing_algorithm {
 	EVEN_PARITY,
 	ODD_PARITY,
 	CRC32,
-	MD5,
 	SHA1
 };
 
@@ -90,8 +87,6 @@ int main(const int argc, const char* argv[])
 				hash = ODD_PARITY;
 			} else if (strcmp("--crc32", argv[i]) == 0) {
 				hash = CRC32;
-			} else if (strcmp("--md5", argv[i]) == 0) {
-				hash = MD5;
 			} else if (strcmp("--sha1", argv[i]) == 0) {
 				hash = SHA1;
 			} else {
