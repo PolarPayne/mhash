@@ -27,20 +27,14 @@ uint32_t mhash_crc32_buf(uint32_t crc, uint8_t* data, size_t len)
 
 uint32_t mhash_crc32_file(FILE* fp)
 {
-	uint8_t buffer[BUFFER_LEN];
-	int c;
-
 	uint32_t crc = 0;
 
-	size_t i = 0;
-	while ((c = fgetc(fp)) != EOF) {
-		buffer[i++] = (uint8_t) c;
-		if (i == BUFFER_LEN) {
-			crc = mhash_crc32_buf(crc, buffer, BUFFER_LEN);
-			i = 0;
-		}
+	uint8_t buffer[512];
+	size_t c = 0;
+	while (!feof(fp)) {
+		c = fread(buffer, sizeof(uint8_t), 512, fp);
+		crc = mhash_crc32_buf(crc, buffer, c);
 	}
-	if (i > 0)
-		crc = mhash_crc32_buf(crc, buffer, i);
+
 	return crc;
 }
