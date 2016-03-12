@@ -6,7 +6,6 @@
 #include "mhash_crc32.h"
 #include "mhash_parity.h"
 #include "mhash_sha1.h"
-#include "google_sha1.h"
 
 int mu_tests_run = 0;
 

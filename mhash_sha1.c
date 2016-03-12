@@ -33,7 +33,6 @@ void static hash_block(mhash_sha1_ctx_type* ctx)
 			w[i] = ctx->buffer[i];
 		else
 			w[i] = rol32(w[i-3] ^ w[i-8] ^ w[i-14] ^ w[i-16], 1);
-		fprintf(stderr, "w[%02" PRIu8 "] %08" PRIx32 "\n", i, w[i]);
 	}
 
 	for (uint8_t i = 0; i < 80; i++) {

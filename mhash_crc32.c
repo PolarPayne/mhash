@@ -17,30 +17,26 @@ uint32_t static inline mhash_crc32(uint32_t crc, uint8_t data)
 
 uint32_t mhash_crc32_buf(uint32_t crc, uint8_t* data, size_t len)
 {
-	assert(len > 0);
-
 	for (size_t i = 0; i < len; i++) {
 		crc = mhash_crc32(crc, data[i]);
 	}
 	return crc;
 }
 
+#define BUFFER_LEN 512
+
 uint32_t mhash_crc32_file(FILE* fp)
 {
-	assert(fp != NULL);
-
-	uint8_t buffer[MHASH_READBUFFER_SIZE];
+	uint8_t buffer[BUFFER_LEN];
 	int c;
 
 	uint32_t crc = 0;
 
 	size_t i = 0;
 	while ((c = fgetc(fp)) != EOF) {
-		assert(i >= 0 && i < MHASH_READBUFFER_SIZE);
-		buffer[i] = (uint8_t) c;
-		i++;
-		if (i == MHASH_READBUFFER_SIZE) {
-			crc = mhash_crc32_buf(crc, buffer, MHASH_READBUFFER_SIZE);
+		buffer[i++] = (uint8_t) c;
+		if (i == BUFFER_LEN) {
+			crc = mhash_crc32_buf(crc, buffer, BUFFER_LEN);
 			i = 0;
 		}
 	}

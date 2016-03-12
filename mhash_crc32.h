@@ -1,13 +1,27 @@
-#ifndef CRC32_H
-#define CRC32_H
+#ifndef MHASH_CRC32_H
+#define MHASH_CRC32_H
 
 #include <inttypes.h>
 #include <stdio.h>
-#include <assert.h>
 
-#define MHASH_READBUFFER_SIZE 512
+/* Returns CRC32 of data.
+ * @crc The current crc of your data (use 0 on first pass).
+ * @data Pointer the beginning of your data that will be hashed.
+ * @len Length of the data.
+ *
+ * 
+ *
+ * @return CRC32 of the data.
+ */
+uint32_t mhash_crc32_buf(uint32_t crc, uint8_t* data, size_t len);
 
-uint32_t mhash_crc32_buf(uint32_t, uint8_t*, size_t);
-uint32_t mhash_crc32_file(FILE*);
+/* Returns CRC32 of file.
+ * @fp File pointer to an already open file.
+ *
+ * Reads the file until EOF and hashes the data.
+ *
+ * @return CRC32 of the file.
+ */
+uint32_t mhash_crc32_file(FILE* fp);
 
-#endif // CRC32_H
+#endif // MHASH_CRC32_H

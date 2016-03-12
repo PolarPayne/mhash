@@ -2,7 +2,7 @@
 
 CC = clang
 
-BASIC_CFLAGS = -std=c11 -O1 -g -Weverything
+BASIC_CFLAGS = -std=c11 -O0 -g -Weverything
 BASIC_LDFLAGS =
 
 ALL_CFLAGS = $(CFLAGS) $(BASIC_CFLAGS)
@@ -20,12 +20,10 @@ TEST += test.o
 MAIN += main.o
 
 OBJS += mhash_utils.o
-OBJS += mhash_errors.o
 OBJS += mhash_crc32.o
 OBJS += mhash_parity.o
 #OBJS += mhash_md5.o
 OBJS += mhash_sha1.o
-OBJS += google_sha1.o
 
 ALL_OBJS = $(TEST) $(MAIN) $(OBJS)
 
