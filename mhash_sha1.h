@@ -14,7 +14,7 @@
 
 typedef struct mhash_sha1_ctx {
 	uint64_t byte_count;
-	uint32_t buffer[80];
+	uint32_t buffer[BLOCK_LENGTH/4];
 	uint32_t state[HASH_LENGTH/4];
 	uint8_t buffer_offset;
 } mhash_sha1_ctx_type;
