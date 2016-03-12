@@ -126,7 +126,6 @@ int main(const int argc, const char* argv[])
 		return 1;
 	}
 
-	FILE* fp;
 
 	if (check) {
 		fprintf(stderr, "file checking is not yet implemented\n");
@@ -134,11 +133,12 @@ int main(const int argc, const char* argv[])
 	} else {
 		for (int i = 1; i < argc; i++) {
 			unsigned long len = strlen(argv[i]);
-			if (len > 0 && argv[i][0] == '-' && len != 1)
+			if ((len > 1 && argv[i][0] == '-') || len == 0)
 				continue;
 
 			char* mode = binary_mode ? "rb" : "r";
 
+			FILE* fp;
 			if (len == 1 && argv[i][0] == '-'){
 				// make sure that stdin is in right mode
 				freopen(NULL, mode, stdin);
@@ -166,7 +166,6 @@ int main(const int argc, const char* argv[])
 				for (uint8_t j = 0; j < 20; j++)
 					printf("%02" PRIx8, out[j]);
 			}
-
 			printf("  %s\n", argv[i]);
 
 			fclose(fp);

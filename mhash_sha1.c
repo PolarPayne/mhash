@@ -13,11 +13,14 @@ void mhash_sha1_init(mhash_sha1_ctx_type* ctx)
 	ctx->state[4] = 0xc3d2e1f0;
 	ctx->byte_count = 0;
 	ctx->buffer_offset = 0;
+	//for (int i = 0; i < 80; i++)
+	//	ctx->buffer[i] = 0;
 }
 
 void static hash_block(mhash_sha1_ctx_type* ctx)
 {
 	uint32_t a, b, c, d, e, f, k, t;
+	uint32_t w[80] = {0};
 
 	a = ctx->state[0];
 	b = ctx->state[1];
@@ -25,8 +28,12 @@ void static hash_block(mhash_sha1_ctx_type* ctx)
 	d = ctx->state[3];
 	e = ctx->state[4];
 
-	for (uint8_t i = 16; i < 80; i++) {
-		ctx->buffer[i] = rol32(ctx->buffer[i-3] ^ ctx->buffer[i-8] ^ ctx->buffer[i-14] ^ ctx->buffer[i-16], 1);
+	for (uint8_t i = 0; i < 80; i++) {
+		if (i < 16)
+			w[i] = ctx->buffer[i];
+		else
+			w[i] = rol32(w[i-3] ^ w[i-8] ^ w[i-14] ^ w[i-16], 1);
+		fprintf(stderr, "w[%02" PRIu8 "] %08" PRIx32 "\n", i, w[i]);
 	}
 
 	for (uint8_t i = 0; i < 80; i++) {
@@ -43,18 +50,18 @@ void static hash_block(mhash_sha1_ctx_type* ctx)
 			f = b ^ c ^ d;
 			k = 0xca62c1d6;
 		}
-		t = rol32(a, 5) + f + e + k + ctx->buffer[i];
+		t = rol32(a, 5) + f + e + k + w[i];
 		e = d;
 		d = c;
 		c = rol32(b, 30);
 		b = a;
 		a = t;
 	}
-	ctx->state[0] = ctx->state[0] + a;
-	ctx->state[1] = ctx->state[1] + b; 
-	ctx->state[2] = ctx->state[2] + c;
-	ctx->state[3] = ctx->state[3] + d;
-	ctx->state[4] = ctx->state[4] + e;
+	ctx->state[0] += a;
+	ctx->state[1] += b; 
+	ctx->state[2] += c;
+	ctx->state[3] += d;
+	ctx->state[4] += e;
 }
 
 void static add_uncounted(mhash_sha1_ctx_type* ctx, uint8_t data)
@@ -120,7 +127,6 @@ uint8_t* mhash_sha1_result(mhash_sha1_ctx_type* ctx)
 				| (((ctx->state[i])>>24)& 0x000000ff);
 		}
 	}
-
 	// Return pointer to hash (20 characters)
 	return (uint8_t*) ctx->state;
 }
@@ -132,8 +138,9 @@ void mhash_sha1_file(FILE* fp, uint8_t* res)
 
 	char buffer[512];
 	uint64_t c = 0;
-	while ((c = fread(buffer, sizeof(uint8_t), 512, fp)) != 0)
+	while ((c = fread(buffer, sizeof(char), 512, fp)) != 0)
 		mhash_sha1_write(&ctx, buffer, c);
 
-	memcpy(res, mhash_sha1_result(&ctx), 20);
+	uint8_t* out = mhash_sha1_result(&ctx);
+	memcpy(res, out, HASH_LENGTH);
 }
