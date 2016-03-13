@@ -149,7 +149,7 @@ int main(const int argc, const char* argv[])
 				printf("%" PRIu8, out);
 			} else if (CRC32 == hash) {
 				uint32_t out = mhash_crc32_file(fp);
-				printf("%" PRIx32, out);
+				printf("%08" PRIx32, out);
 			} else if (SHA1 == hash) {
 				uint8_t out[HASH_LENGTH];
 				mhash_sha1_file(fp, out);
