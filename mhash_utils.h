@@ -3,8 +3,13 @@
 
 #include <stdint.h>
 
-/** Returns true on a big endian machine,
- *  and false on little endian machine.
+/* Returns true if the machine is big endian.
+ *
+ * Doesn't rely on undefined behaviour, and works
+ * during runtime.
+ *
+ * @return True on big endian machine, false on
+ * little endian.
  */
 _Bool mhash_is_big_endian(void);
 

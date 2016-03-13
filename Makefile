@@ -1,4 +1,4 @@
-.PHONY: run all test clean
+.PHONY: all test clean
 
 CC = clang
 
@@ -20,8 +20,8 @@ TEST += test.o
 MAIN += main.o
 
 OBJS += mhash_utils.o
-OBJS += mhash_crc32.o
 OBJS += mhash_parity.o
+OBJS += mhash_crc32.o
 OBJS += mhash_sha1.o
 
 ALL_OBJS = $(TEST) $(MAIN) $(OBJS)

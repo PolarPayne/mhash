@@ -6,10 +6,10 @@
 
 /* Returns CRC32 of data.
  * @crc The current crc of your data (use 0 on first pass).
- * @data Pointer the beginning of your data that will be hashed.
+ * @data Pointer to the beginning of your data that will be hashed.
  * @len Length of the data.
  *
- * 
+ * Calculates the CRC32 of given data.
  *
  * @return CRC32 of the data.
  */

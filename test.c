@@ -158,6 +158,14 @@ void tests_sha1(int* total, int* fails)
 	mhash_sha1_write(&ctx, "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq", 56);
 	printHash(mhash_sha1_result(&ctx));
 	printf("\n\n");
+	
+	printf("Test: FIPS 180-2 C.3 and RFC3174 7.3 TEST3\n");
+	printf("Expect: 34aa973cd4c4daa4f61eeb2bdbad27316534016f\n");
+	printf("Result: ");
+	mhash_sha1_init(&ctx);
+	for (int i = 0; i < 1000000; i++) mhash_sha1_writebyte(&ctx, 'a');
+	printHash(mhash_sha1_result(&ctx));
+	printf("\n");
 
 	printf("Test: RFC3174 7.3 TEST4\n");
 	printf("Expect: dea356a2cddd90c7a7ecedc5ebb563934f460452\n");
@@ -167,14 +175,6 @@ void tests_sha1(int* total, int* fails)
 		mhash_sha1_write(&ctx, "01234567", 8);
 	printHash(mhash_sha1_result(&ctx));
 	printf("\n\n");
-
-	printf("Test: FIPS 180-2 C.3 and RFC3174 7.3 TEST3\n");
-	printf("Expect:34aa973cd4c4daa4f61eeb2bdbad27316534016f\n");
-	printf("Result:");
-	mhash_sha1_init(&ctx);
-	for (int i = 0; i < 1000000; i++) mhash_sha1_writebyte(&ctx, 'a');
-	printHash(mhash_sha1_result(&ctx));
-	printf("\n");
 }
 
 int main()
