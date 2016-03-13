@@ -2,4 +2,4 @@ Tarkemmin SHA1 debuggaamisesta, näyttäisi että siellä jää jokin initialiso
 Löysin useamman pienehkön ongelman SHA1 koodista, ja nyt se antaa aina samalle tiedostolle saman hashin (jee), mutta se on edelleen väärä.
 Huomasin että pariteetti koodi ei toimikkaan oikein aina...
 Korjasin pariteetti koodin, ja muokkasin sitä niin että hakutaulukko rakennetaan suorituksen aikana. Tutkin mahdollisuutta toteuttaa CRC32 koodin vielä käyttäen hakutaulua, nimittäin se on erittäin hidas suuremmilla tiedostoilla.
-Kirjoitin kaikki testit kokonaan uusiksi, SHA1 testit ovat vielä hieman kesken.
+Kirjoitin testit kokonaan uusiksi, SHA1 testit ovat vielä hieman kesken.

@@ -17,7 +17,7 @@
  *
  * Only useful inside the implementation, and when debugging.
  */
-#define BLOCK_LENGTH 64
+#define MHASH_SHA1_BLOCK_LENGTH 64
 
 /* Context that holds all information needed for SHA1.
  *
@@ -25,8 +25,8 @@
  */
 typedef struct mhash_sha1_ctx {
 	uint64_t byte_count;
-	uint32_t buffer[BLOCK_LENGTH/4];
-	uint32_t state[HASH_LENGTH/4];
+	uint32_t buffer[MHASH_SHA1_BLOCK_LENGTH/4];
+	uint32_t state[MHASH_SHA1_LENGTH/4];
 	uint8_t buffer_offset;
 } mhash_sha1_ctx_type;
 

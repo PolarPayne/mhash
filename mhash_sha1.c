@@ -74,7 +74,7 @@ void static add_uncounted(mhash_sha1_ctx_type* ctx, uint8_t data)
 
 	ctx->buffer_offset++;
 
-	if (ctx->buffer_offset == BLOCK_LENGTH) {
+	if (ctx->buffer_offset == MHASH_SHA1_BLOCK_LENGTH) {
 		hash_block(ctx);
 		ctx->buffer_offset = 0;
 	}
@@ -141,5 +141,5 @@ void mhash_sha1_file(FILE* fp, uint8_t* res)
 		mhash_sha1_write(&ctx, buffer, c);
 
 	uint8_t* out = mhash_sha1_result(&ctx);
-	memcpy(res, out, HASH_LENGTH);
+	memcpy(res, out, MHASH_SHA1_LENGTH);
 }
