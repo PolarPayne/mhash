@@ -38,7 +38,7 @@ Hieman kauemmin kuin vain puhtaiden nollien pariteetin laskeminen (175ms) ja mer
 5700ms vs sha1sum:n 1400ms, eli sama tulos kuin täysin nolla datalla joka ei ole koin yllättävää.
 
 # Kansiollinen musiikkia
-Nimeltä mainitsemattoman tummaihoisen rap/hip hop artistin viimeisin levy. 18 kpl mp3 tiedostoja, yhteensä ~108 megatavua.
+Nimeltä mainitsemattoman rap/hip hop artistin viimeisin levy. 18 kpl mp3 tiedostoja, yhteensä ~108 megatavua.
 
 ## Pariteetti
 Ensimmäinen lukukerta kesti monta kertaa pidempää kuin seuraavat, johtunee cachingista. Keskimäärin 40ms.
@@ -51,6 +51,9 @@ Ensimmäinen lukukerta kesti monta kertaa pidempää kuin seuraavat, johtunee ca
 
 # Appendix
 "Oikeat" ohjelmoijat on vähän niin kuin yksisarvisia, niitä ei ole olemassa, tai kukaan ei ole ainakaan ikinä nähnyt sellaista, mutta silti niistä kuulee vähän väliä.
+
+## Aikavaativuudet
+Kuten hyvin näkyy niin kaikki algoritmit toimivat mukavasti lineaarisessa ajassa, ja siten että käytännössä ainoastaan syötteen pituudella on väliä (ei sen sisällöllä). Tein myös todella hienon pdf:n jossa on dataa piirrettynä [täss](./data_graphs_unicorns.pdf).
 
 ## Optimoinnin tärkeys
 Esimerkiksi CRC32 laskeminen -O0 optimoinnilla kestää reilut 5x pidempään, ja pariteetin laskeminen noin 2x pidempään (aka compiler on ihan kiva).
