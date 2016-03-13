@@ -1,194 +1,197 @@
 #include <stdio.h>
-#include <assert.h>
 
-#include "minunit.h"
-
-#include "mhash_crc32.h"
 #include "mhash_parity.h"
+#include "mhash_crc32.h"
 #include "mhash_sha1.h"
 
-int mu_tests_run = 0;
-
-/*
- * CRC32 file read tests
- */
-static char* test_crc32_files()
+void test_parity(int*, int*, uint8_t, uint8_t*, size_t, uint8_t);
+void test_parity(int* total, int* fails,
+	uint8_t expect, uint8_t* data, size_t len, uint8_t parity)
 {
-	FILE* fp;
-	uint32_t hash;
-
-	fp = fopen("tests/derp.png", "rb");
-	hash = mhash_crc32_file(fp);
-	fclose(fp);
-	mu_assert("CRC32 of derp.png wasn't 0xac340e73", 0xac340e73 == hash);
-
-	fp = fopen("tests/fox.txt", "rb");
-	hash = mhash_crc32_file(fp);
-	fclose(fp);
-	mu_assert("CRC32 of fox.txt wasn't 0x519025e9", 0x519025e9 == hash);
-
-	fp = fopen("tests/index.html", "rb");
-	hash = mhash_crc32_file(fp);
-	fclose(fp);
-	mu_assert("CRC32 of index.html wasn't 0xc5813ba0", 0xc5813ba0 == hash);
-
-	fp = fopen("tests/mom.txt", "rb");
-	hash = mhash_crc32_file(fp);
-	fclose(fp);
-	mu_assert("CRC32 of mom.txt wasn't 0x124f3381", 0x124f3381 == hash);
-
-	fp = fopen("tests/random0", "rb");
-	hash = mhash_crc32_file(fp);
-	fclose(fp);
-	mu_assert("CRC32 of random0 wasn't 0x124f3381", 0xf60e41de == hash);
-
-	fp = fopen("tests/random1", "rb");
-	hash = mhash_crc32_file(fp);
-	fclose(fp);
-	mu_assert("CRC32 of random1 wasn't 0xf112b0cb", 0xf112b0cb == hash);
-
-	fp = fopen("tests/random2", "rb");
-	hash = mhash_crc32_file(fp);
-	fclose(fp);
-	mu_assert("CRC32 of random2 wasn't 0xc06d8a53", 0xc06d8a53 == hash);
-
-	fp = fopen("tests/random3", "rb");
-	hash = mhash_crc32_file(fp);
-	fclose(fp);
-	mu_assert("CRC32 of random3 wasn't 0x41b38c37", 0x41b38c37 == hash);
-
-	return 0;
-}
-
-/*
- * CRC32 buffer tests, test values are calculated with
- * two different online calculators to be sure they
- * are correct.
- *
- * Do note that these "strings" don't include null byte.
- */
-static char* test_crc32_buf()
-{
-	uint8_t data[4];
-	uint32_t hash;
-
-	data[0] = 'h'; data[1] = 'o'; data[2] = 'w'; data[3] = 'a';
-	hash = mhash_crc32_buf(0, data, 4);
-	mu_assert("CRC32 of \"howa\" wasn't 0xc6963212", 0xc6963212 == hash);
-
-	data[0] = 'a'; data[1] = 'b'; data[2] = 'c'; data[3] = 'd';
-	hash = mhash_crc32_buf(0, data, 4);
-	mu_assert("CRC32 of \"abcd\" wasn't 0xed82cd11", 0xed82cd11 == hash);
-
-	data[0] = 'r'; data[1] = 'o'; data[2] = 'n'; data[3] = 'z';
-	hash = mhash_crc32_buf(0, data, 4);
-	mu_assert("CRC32 of \"ronz\" wasn't 0xe857e51d", 0xe857e51d == hash);
-
-	return 0;
-}
-
-static char* test_parity_files()
-{
-	FILE* fp;
-	uint8_t parity;
-
-
-	fp = fopen("tests/parity0", "rb");
-	parity = mhash_parity_file(fp, MHASH_PARITY_EVEN);
-	fclose(fp);
-	mu_assert("Even parity of parity0 wasn't 1", 1 == parity);
-
-	fp = fopen("tests/parity1", "rb");
-	parity = mhash_parity_file(fp, MHASH_PARITY_EVEN);
-	fclose(fp);
-	mu_assert("Even parity of parity1 wasn't 0", 0 == parity);
-
-
-	fp = fopen("tests/parity0", "rb");
-	parity = mhash_parity_file(fp, MHASH_PARITY_ODD);
-	fclose(fp);
-	mu_assert("Even parity of parity0 wasn't 0", 0 == parity);
-
-	fp = fopen("tests/parity1", "rb");
-	parity = mhash_parity_file(fp, MHASH_PARITY_ODD);
-	fclose(fp);
-	mu_assert("Even parity of parity1 wasn't 1", 1 == parity);
-
-	return 0;
-}
-
-void static print_sha1(uint8_t* h)
-{
-	for (int i = 0; i < 20; i++) {
-		fprintf(stderr, "%02" PRIx8, h[i]);
+	(*total)++;
+	uint8_t result = mhash_parity_buf(0, data, len, parity);
+	if (expect != result) {
+		(*fails)++;
+		printf("=== FAIL ===\n");
+		printf("Data:\n\t");
+		for (size_t i = 0; i < len; i++) {
+			printf("%02" PRIx8, data[i]);
+			if ((i+1) % 8 == 0 && (i+1) != len)
+				printf("\n\t");
+		}
+		printf("\n");
+	} else {
+		printf("=== SUCCESS ===\n");
 	}
-	fprintf(stderr, "\n");
+	printf("Expect: %" PRIu8 "\n", expect);
+	printf("Result: %" PRIu8 "\n\n", result);
 }
 
-void static print_states(sha1nfo* google, mhash_sha1_ctx_type* mhash)
+void tests_odd_parity(int*, int*);
+void tests_odd_parity(int* total, int* fails)
 {
-	fprintf(stderr, "---- BUFFER -----\n");
-	for (int i = 0; i < 16; i++) {
-		fprintf(stderr, "%08" PRIx32 " %08" PRIx32 "\n",
-			google->buffer[i], mhash->buffer[i]);
+	uint8_t data[64];
+
+	printf("Odd Parity\n");
+	printf("==========\n\n");
+
+	for (int i = 0; i < 64; i++)
+		data[i] = 0;
+	test_parity(total, fails, 1, data, 64, MHASH_PARITY_ODD);
+
+	for (int i = 0; i < 64; i++)
+		data[i] = 1;
+	test_parity(total, fails, 1, data, 64, MHASH_PARITY_ODD);
+
+	for (int i = 0; i < 64; i++)
+		data[i] = 0xff;
+	test_parity(total, fails, 1, data, 64, MHASH_PARITY_ODD);
+
+	data[13] = 0;
+	test_parity(total, fails, 0, data, 64, MHASH_PARITY_ODD);
+
+	for (int i = 0; i < 64; i++)
+		data[i] = 0;
+	data[21] = 1;
+	test_parity(total, fails, 0, data, 64, MHASH_PARITY_ODD);	
+}
+
+void tests_even_parity(int*, int*);
+void tests_even_parity(int* total, int* fails)
+{
+	uint8_t data[64];
+
+	printf("Even Parity\n");
+	printf("==========\n\n");
+
+	for (int i = 0; i < 64; i++)
+		data[i] = 0;
+	test_parity(total, fails, 0, data, 64, MHASH_PARITY_EVEN);
+
+	for (int i = 0; i < 64; i++)
+		data[i] = 1;
+	test_parity(total, fails, 0, data, 64, MHASH_PARITY_EVEN);
+
+	for (int i = 0; i < 64; i++)
+		data[i] = 0xff;
+	test_parity(total, fails, 0, data, 64, MHASH_PARITY_EVEN);
+
+	data[13] = 0;
+	test_parity(total, fails, 1, data, 64, MHASH_PARITY_EVEN);
+
+	for (int i = 0; i < 64; i++)
+		data[i] = 0;
+	data[21] = 1;
+	test_parity(total, fails, 1, data, 64, MHASH_PARITY_EVEN);	
+}
+
+void test_crc32(int*, int*, uint32_t, uint8_t*, size_t);
+void test_crc32(int* total, int* fails,
+	uint32_t expect, uint8_t* data, size_t len)
+{
+	(*total)++;
+	uint32_t result = mhash_crc32_buf(0, data, len);
+	if (expect != result) {
+		(*fails)++;
+		printf("=== FAIL ===\n");
+		printf("Data: ");
+		for (size_t i = 0; i < len; i++) {
+			printf("%c", (char) data[i]);
+		}
+		printf("\n");
+	} else {
+		printf("=== SUCCESS ===\n");
 	}
+	printf("Expect: %08" PRIx32 "\n", expect);
+	printf("Result: %08" PRIx32 "\n\n", result);
+}
+
+void tests_crc32(int*, int*);
+void tests_crc32(int* total, int* fails)
+{
+	char* data;
+
+	printf("CRC32\n");
+	printf("=====\n\n");
+
+	test_crc32(total, fails, 0, NULL, 0);
 	
-	fprintf(stderr, "----- STATE -----\n");
-	for (int i = 0; i < 5; i++) {
-		fprintf(stderr, "%08" PRIx32 " %08" PRIx32 "\n",
-			google->state[i], mhash->state[i]);
+	data = "hi mom";
+	test_crc32(total, fails, 0xf01ca468, (uint8_t*) data, 6);
+
+	data = "The quick brown fox jumps over the lazy dog.";
+	test_crc32(total, fails, 0x519025e9, (uint8_t*) data, 44);
+
+	data = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+	test_crc32(total, fails, 0x29BA2932, (uint8_t*) data, 56);
+}
+
+void printHash(uint8_t* hash) {
+	int i;
+	for (i=0; i<20; i++) {
+		printf("%02x", hash[i]);
 	}
+	printf("\n");
 }
 
-#define SIZE 256
-_Bool static google_vs_mhash(char* filename)
+void tests_sha1(int*, int*);
+void tests_sha1(int* total, int* fails)
 {
-	sha1nfo google;
-	mhash_sha1_ctx_type mhash;
+	printf("SHA1\n");
+	printf("====\n\n");
 
-	sha1_init(&google);
-	mhash_sha1_init(&mhash);
+	mhash_sha1_ctx_type ctx;
 
-	uint8_t* google_res = sha1_result(&google);
-	//memcpy(google_res, sha1_result(&google), 20);
-	uint8_t* mhash_res = mhash_sha1_result(&mhash);
-	//memcpy(mhash_res, mhash_sha1_result(&mhash), 20);
+	// SHA tests
+	printf("Test: FIPS 180-2 C.1 and RFC3174 7.3 TEST1\n");
+	printf("Expect: a9993e364706816aba3e25717850c26c9cd0d89d\n");
+	printf("Result: ");
+	mhash_sha1_init(&ctx);
+	mhash_sha1_write(&ctx, "abc", 3);
+	printHash(mhash_sha1_result(&ctx));
+	printf("\n\n");
 
-	print_sha1(google_res);
-	print_sha1(mhash_res);
+	printf("Test: FIPS 180-2 C.2 and RFC3174 7.3 TEST2\n");
+	printf("Expect: 84983e441c3bd26ebaae4aa1f95129e5e54670f1\n");
+	printf("Result: ");
+	mhash_sha1_init(&ctx);
+	mhash_sha1_write(&ctx, "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq", 56);
+	printHash(mhash_sha1_result(&ctx));
+	printf("\n\n");
 
-	for (int i = 0; i < 20; i++) {
-		if (google_res[i] != mhash_res[i])
-			return 0;
-	}
-	return 1;
+	printf("Test: RFC3174 7.3 TEST4\n");
+	printf("Expect: dea356a2cddd90c7a7ecedc5ebb563934f460452\n");
+	printf("Result: ");
+	mhash_sha1_init(&ctx);
+	for (int i = 0; i < 80; i++)
+		mhash_sha1_write(&ctx, "01234567", 8);
+	printHash(mhash_sha1_result(&ctx));
+	printf("\n\n");
 
-}
-
-static char* test_sha1()
-{
-	mu_assert("Google SHA1 and mhash SHA1 output were different",
-		google_vs_mhash("tests/fox.txt"));
-
-	return 0;
-}
-
-static char* all_tests()
-{
-	mu_run_test(test_sha1);
-
-	return 0;
+	printf("Test: FIPS 180-2 C.3 and RFC3174 7.3 TEST3\n");
+	printf("Expect:34aa973cd4c4daa4f61eeb2bdbad27316534016f\n");
+	printf("Result:");
+	mhash_sha1_init(&ctx);
+	for (int i = 0; i < 1000000; i++) mhash_sha1_writebyte(&ctx, 'a');
+	printHash(mhash_sha1_result(&ctx));
+	printf("\n");
 }
 
 int main()
 {
-	char* result = all_tests();
-	if (result != 0)
-		printf("%s\n", result);
-	else
-		printf("ALL TESTS PASSED\n");
+	int total = 0;
+	int fails = 0;
 
-	printf("Tests run: %d\n", mu_tests_run);
+	tests_odd_parity(&total, &fails);
+	tests_even_parity(&total, &fails);
+	tests_crc32(&total, &fails);
+	tests_sha1(&total, &fails);
 
-	return result != 0;
+	printf("RESULTS\n");
+	printf("=======\n");
+
+	float percent = ((float) (total - fails)) / ((float) total);
+	printf("%d/%d (%3.2f%%) passed\n", total - fails, total, percent * 100);
+
+	return fails > 0;
 }

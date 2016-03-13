@@ -1,10 +1,11 @@
 #include "mhash_parity.h"
 
+//Ugly "hack" to initialize array with nonzero values.
 #define VAL_1X 2
-#define VAL_2X VAL_1X,  VAL_1X
-#define VAL_4X VAL_2X,  VAL_2X
-#define VAL_8X VAL_4X,  VAL_4X
-#define VAL_16X VAL_8X,  VAL_8X
+#define VAL_2X VAL_1X, VAL_1X
+#define VAL_4X VAL_2X, VAL_2X
+#define VAL_8X VAL_4X, VAL_4X
+#define VAL_16X VAL_8X, VAL_8X
 #define VAL_32X VAL_16X, VAL_16X
 #define VAL_64X VAL_32X, VAL_32X
 #define VAL_128X VAL_64X, VAL_64X

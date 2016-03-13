@@ -7,7 +7,7 @@
 #define MHASH_PARITY_ODD 0
 #define MHASH_PARITY_EVEN 1
 
-/* Returns CRC32 of data.
+/* Returns CRC32 hash of data.
  * @crc The current crc of your data (use 0 on first pass).
  * @data Pointer the beginning of your data that will be hashed.
  * @len Length of the data.

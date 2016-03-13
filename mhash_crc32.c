@@ -5,11 +5,11 @@
 uint32_t static inline mhash_crc32(uint32_t crc, uint8_t data)
 {
 	uint32_t rem = ~crc;
-	for (size_t bit = 0; bit < 8; bit++) {
+	for (uint8_t bit = 0; bit < 8; bit++) {
 		if ((rem & 0x1) != ((data>>bit) & 0x1)) {
-			rem = (rem >> 0x1) ^ (CRC32_POL);
+			rem = (rem >> 1) ^ (CRC32_POL);
 		} else {
-			rem = rem >> 0x1;
+			rem = rem >> 1;
 		}
 	}
 	return ~rem;
@@ -22,8 +22,6 @@ uint32_t mhash_crc32_buf(uint32_t crc, uint8_t* data, size_t len)
 	}
 	return crc;
 }
-
-#define BUFFER_LEN 512
 
 uint32_t mhash_crc32_file(FILE* fp)
 {
