@@ -22,6 +22,7 @@ void print_help()
 	fprintf(stderr, "Usage: mhash [OPTION]... [FILE]...\n");
 	fprintf(stderr, "Print or check checksums.\n");
 	fprintf(stderr, "When file is -, read standard input.\n");
+	fprintf(stderr, "Multiple short options can be combined to a single switch.\n");
 	fprintf(stderr, "\n");
 	fprintf(stderr, "  -b, --binary    read in binary mode\n");
 	fprintf(stderr, "  -t, --text      read in text mode\n");
