@@ -21,3 +21,4 @@
   * 8+h SHA1 debuggaamista ilman merkittäviä tuloksia
 * Viikko 7
   * 1h Vertaisarvioinnin kirjoittaminen (myöhässä), viikkoraporttien päivittäminen
+  * 6h Koodaamista, testien kirjoittamista, dokumentointia
