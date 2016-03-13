@@ -23,3 +23,4 @@
   * 1h Vertaisarvioinnin kirjoittaminen (myöhässä), viikkoraporttien päivittäminen
   * 10h Koodaamista, testien kirjoittamista, dokumentointia
   * 6h Viimeistelyä
+  * 3h Labradokumenttien kirjoittamista

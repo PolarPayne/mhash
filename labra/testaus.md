@@ -1,0 +1,2 @@
+Kaikki julkiset funktiot jotka eivät lue suoraan tiedostoja on testattu test.c tiedostossa. Testit voi suorittaa `make test` komennolla. Testisyötteet on joko tunnettua dataa jolle tiedetään sen oikea hash (tai se on tarkistettu usealla eri toteutuksella), tai sitten kyseinen hash on laskettu käsin (esim pariteetin kohdalla).
+Empiirisestä ohjelma on testattu esim crc32 nimistä komentoriviohjelmaa vastaan, ja se toimii oikein.
