@@ -39,3 +39,4 @@ test: $(TEST) $(OBJS)
 
 clean:
 	rm -rf *.o
+	rm ${BINNAME} ${TESTNAME}
